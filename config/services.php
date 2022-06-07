@@ -31,4 +31,7 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'parser' => [
+        'url' => env('PARSE_URL','https://dominos.ua/uk/chornomorsk/')
+    ]
 ];

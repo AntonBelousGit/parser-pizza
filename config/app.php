@@ -195,6 +195,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         *  Parse Service Providers...
+         */
+
+        \App\Services\ParserService\ParseServiceProvider::class,
+
     ],
 
     /*
