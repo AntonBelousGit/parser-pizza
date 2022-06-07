@@ -7,6 +7,7 @@ namespace App\Services\ParserService;
 
 use DiDom\Document;
 use DiDom\Exceptions\InvalidSelectorException;
+use Throwable;
 
 class ParseService implements Contracts\ParseServiceContract
 {
@@ -25,9 +26,13 @@ class ParseService implements Contracts\ParseServiceContract
      */
     public function parseHtml(): array
     {
-        $html = $this->callConnectToParse();
-
-        $stringRawHtml = $html->find('script');
+        try {
+            $html = $this->callConnectToParse();
+            $stringRawHtml = $html->find('script');
+        } catch (Throwable $exception) {
+            report($exception);
+            return [];
+        }
 
         $stringHtml = $stringRawHtml[8]->text();
         $array = explode("'", ($stringHtml));
