@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sizes', function (Blueprint $table) {
-            $table->string('id', 50)->index();
+            $table->string('id', 50)->index()->unique();
             $table->string('name');
             $table->timestamps();
         });

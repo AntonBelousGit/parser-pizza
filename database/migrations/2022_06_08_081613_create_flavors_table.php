@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('flavors', function (Blueprint $table) {
-            $table->string('id', 50)->index();
+            $table->string('id', 50)->index()->unique();
             $table->string('name');
             $table->string('code');
             $table->timestamps();
