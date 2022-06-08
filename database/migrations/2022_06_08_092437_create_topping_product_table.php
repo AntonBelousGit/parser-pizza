@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('topping_product', function (Blueprint $table) {
             $table->string('topping_id', 50)->references('id')->on('toppings');
-            $table->foreignId('product_id')->constrained();
+            $table->string('product_id', 50)->references('id')->on('products');
         });
     }
 

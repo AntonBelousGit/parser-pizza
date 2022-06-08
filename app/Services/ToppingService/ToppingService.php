@@ -79,7 +79,6 @@ class ToppingService implements ToppingServiceContract
                     $update_size = $this->toppingRepositories->getToppingByID($data['id']);
                     if ($update_size) {
                         $update_size->update($data);
-                        dump(1);
                     } else {
                         (new Topping())->create($data);
                     }

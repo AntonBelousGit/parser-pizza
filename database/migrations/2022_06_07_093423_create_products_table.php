@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->string('id', 50)->index()->unique();
             $table->string('name');
             $table->json('image');
             $table->json('image_mobile');

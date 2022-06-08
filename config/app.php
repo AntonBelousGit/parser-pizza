@@ -203,6 +203,7 @@ return [
         \App\Services\SizeService\SizeServiceProvider::class,
         \App\Services\FlavorService\FlavorServiceProvider::class,
         \App\Services\ToppingService\ToppingServiceProvider::class,
+        \App\Services\ProductService\ProductServiceProvider::class,
     ],
 
     /*

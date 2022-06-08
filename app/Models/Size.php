@@ -13,4 +13,11 @@ class Size extends Model
     public $keyType = 'string';
 
     protected $fillable = ['id','name'];
+
+    public function flavor()
+    {
+        return $this->belongsToMany(
+            Flavor::class, 'product_size_flavor','size_id','flavor_id'
+        );
+    }
 }

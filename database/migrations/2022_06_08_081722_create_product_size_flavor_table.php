@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('product_size_flavor', function (Blueprint $table) {
-            $table->foreignId('product_id')->constrained();
+            $table->string('product_id', 50)->references('id')->on('products');
             $table->string('size_id', 50)->references('id')->on('sizes');
             $table->string('flavor_id', 50)->references('id')->on('flavors');
             $table->float('price')->nullable();
