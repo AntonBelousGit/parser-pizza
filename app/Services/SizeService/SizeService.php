@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Services\SizeService;
 
 
+use App\Jobs\GetParseSizeAndSaveJob;
+use App\Jobs\UpdateSizeAndSaveJob;
 use App\Models\Size;
+use App\Repositories\SizeRepositories;
 use App\Services\SizeService\Contracts\SizeServiceContract;
 use App\Services\SizeService\Contracts\SizeValidatorContract;
-use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
 class SizeService implements SizeServiceContract
@@ -18,9 +20,11 @@ class SizeService implements SizeServiceContract
 
     /**
      * @param SizeValidatorContract $sizeDataValidator
+     * @param SizeRepositories $sizeRepositories
      */
     public function __construct(
-        protected SizeValidatorContract $sizeDataValidator
+        protected SizeValidatorContract $sizeDataValidator,
+        protected SizeRepositories $sizeRepositories,
     )
     {
     }
@@ -45,6 +49,7 @@ class SizeService implements SizeServiceContract
                 try {
 
                     (new Size())->create($data);
+//                    GetParseSizeAndSaveJob::dispatch($data);
 
                 } catch (Throwable $e) {
 
@@ -61,10 +66,41 @@ class SizeService implements SizeServiceContract
 
     /**
      * @param array $array
-     * @return mixed
+     * @return bool
      */
-    public function update(array $array = [])
+    public function update(array $array = []): bool
     {
-        // TODO: Implement update() method.
+        try {
+
+            foreach ($array as $size) {
+
+                $size = $this->sizeDataValidator->validate($size);
+
+                $data = [
+                    'id' => $size['id'],
+                    'name' => html_entity_decode($size['name']),
+                ];
+
+                try {
+                    $update_size = $this->sizeRepositories->getSizeByID($data['id']);
+                    if ($update_size) {
+                        $update_size->update($data);
+//                        UpdateSizeAndSaveJob::dispatch($update_size,$data);
+                    } else {
+                        (new Size())->create($data);
+//                        GetParseSizeAndSaveJob::dispatch($data);
+                    }
+
+                } catch (Throwable $e) {
+
+                    report($e);
+                    continue;
+                }
+            }
+        } catch (Throwable $e) {
+            report($e);
+            return false;
+        }
+        return true;
     }
 }
