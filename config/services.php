@@ -32,6 +32,8 @@ return [
     ],
 
     'parser' => [
-        'url' => env('PARSE_URL','https://dominos.ua/uk/chornomorsk/')
+        'url' => env('PARSE_URL','https://dominos.ua/uk/chornomorsk/'),
+        'product_attribute' => env('PRODUCT_ATTRIBUTE','size'),
+        'product_relations_attribute' => env('PRODUCT_RELATION_ATTRIBUTE','flavor')
     ]
 ];
