@@ -45,7 +45,7 @@ class PizzaParse extends Command
         $attribute = $attributeContract->parseAttribute($contract->parseProduct());
 //        $sizes = $sizeServiceContract->store($attribute[config('services.parser.product_attribute')]);
 //        $flavors = $flavorServiceContract->store($attribute[config('services.parser.product_relations_attribute')]);
-        $topping = $toppingServiceContract->update($attribute[config('services.parser.product_topping')]);
+        $topping = $toppingServiceContract->store($attribute[config('services.parser.product_topping')]);
         dd($topping);
     }
 }

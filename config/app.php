@@ -200,7 +200,9 @@ return [
          */
 
         \App\Services\ParserService\ParseServiceProvider::class,
-
+        \App\Services\SizeService\SizeServiceProvider::class,
+        \App\Services\FlavorService\FlavorServiceProvider::class,
+        \App\Services\ToppingService\ToppingServiceProvider::class,
     ],
 
     /*
