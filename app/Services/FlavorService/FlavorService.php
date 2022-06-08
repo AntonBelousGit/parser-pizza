@@ -8,7 +8,7 @@ namespace App\Services\FlavorService;
 use App\Jobs\GetParseSizeAndSaveJob;
 use App\Jobs\UpdateSizeAndSaveJob;
 use App\Models\Flavor;
-use App\Repositories\FlavorRepositories;
+use App\Repositories\ToppingRepositories;
 use App\Services\FlavorService\Contracts\FlavorServiceContract;
 use App\Services\FlavorService\Contracts\FlavorValidatorContract;
 use Throwable;
@@ -20,11 +20,11 @@ class FlavorService implements FlavorServiceContract
 
     /**
      * @param FlavorValidatorContract $flavorValidatorContract
-     * @param FlavorRepositories $flavorRepositories
+     * @param ToppingRepositories $flavorRepositories
      */
     public function __construct(
         protected FlavorValidatorContract $flavorValidatorContract,
-        protected FlavorRepositories $flavorRepositories,
+        protected ToppingRepositories $flavorRepositories,
     )
     {
     }
@@ -37,9 +37,9 @@ class FlavorService implements FlavorServiceContract
     {
         try {
 
-            foreach ($array as $size) {
+            foreach ($array as $flavor) {
 
-                $flavor = $this->flavorValidatorContract->validate($size);
+                $flavor = $this->flavorValidatorContract->validate($flavor);
                 $data = [
                     'id' => $flavor['id'],
                     'name' => html_entity_decode($flavor['name']),
@@ -69,9 +69,9 @@ class FlavorService implements FlavorServiceContract
     {
         try {
 
-            foreach ($array as $size) {
+            foreach ($array as $flavor) {
 
-                $flavor = $this->flavorValidatorContract->validate($size);
+                $flavor = $this->flavorValidatorContract->validate($flavor);
 
                 $data = [
                     'id' => $flavor['id'],
