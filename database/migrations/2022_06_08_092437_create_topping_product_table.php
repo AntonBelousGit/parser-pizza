@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->json('image');
-            $table->json('image_mobile');
-            $table->timestamps();
+        Schema::create('topping_product', function (Blueprint $table) {
+            $table->string('topping_id', 50)->references('id')->on('toppings');
+            $table->foreignId('product_id')->constrained();
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('topping_product');
     }
 };
