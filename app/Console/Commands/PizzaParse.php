@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Jobs\GetParseSizeAndSaveJob;
 use App\Services\FlavorService\Contracts\FlavorServiceContract;
 use App\Services\ParserService\Contracts\ParseServiceAttributeContract;
 use App\Services\ParserService\Contracts\ParseServiceContract;
 use App\Services\ProductService\Contracts\ProductServiceContract;
-use App\Services\ProductService\ProductServiceProvider;
 use App\Services\SizeService\Contracts\SizeServiceContract;
 use App\Services\ToppingService\Contracts\ToppingServiceContract;
-use App\Services\ToppingService\ToppingServiceProvider;
 use Illuminate\Console\Command;
 
 class PizzaParse extends Command
@@ -34,7 +31,7 @@ class PizzaParse extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle(
         ParseServiceContract $contract,
@@ -47,11 +44,10 @@ class PizzaParse extends Command
     {
         $data = $contract->parseProduct();
         $attribute = $attributeContract->parseAttribute($data);
-        $sizes = $sizeServiceContract->store($attribute[config('services.parser.product_attribute')]);
-        $flavors = $flavorServiceContract->store($attribute[config('services.parser.product_relations_attribute')]);
-        $topping = $toppingServiceContract->store($attribute[config('services.parser.product_topping')]);
-        $product = $productServiceContract->store($data);
+        $sizeServiceContract->store($attribute[config('services.parser.product_attribute')]);
+        $flavorServiceContract->store($attribute[config('services.parser.product_relations_attribute')]);
+        $toppingServiceContract->store($attribute[config('services.parser.product_topping')]);
+        $productServiceContract->store($data);
 
-        dd($topping);
     }
 }
