@@ -9,9 +9,11 @@ use DiDom\Document;
 
 interface ParseServiceContract
 {
-
+    /*
+     *  config('services.parser.url') - connection url
+     */
     public function callConnectToParse() : Document;
 
-    public function parseHtml(): array;
+    public function parseProduct(): array;
 
 }
