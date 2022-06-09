@@ -45,17 +45,7 @@ class ProductService implements ProductServiceContract
                 $item['name'] = html_entity_decode($item['name']);
 
                 try {
-                    $product = (new Product())->create($item);
-
-                    $product->topping()->attach(Arr::pluck($item['toppings'], 'id'));
-
-                    foreach ($item['sizes'] as $size) {
-                        foreach ($size['flavors'] as $flavor) {
-//
-                            $product->size()->attach($size['id'], ['flavor_id' => $flavor['id'], 'price' => $flavor['product']['price']]);
-                        }
-                    }
-
+                    $this->createProduct($item);
                 } catch (Throwable $e) {
 
                     report($e);
@@ -75,37 +65,73 @@ class ProductService implements ProductServiceContract
      */
     public function update(array $array = []): bool
     {
-//        try {
-//
-//            foreach ($array as $size) {
-//
-//                $size = $this->validatorContract->validate($size);
-//
-//                $data = [
-//                    'id' => $size['id'],
-//                    'name' => html_entity_decode($size['name']),
-//                ];
-//
-//                try {
-//                    $update_size = $this->productRepositories->getProductByID($data['id']);
-//                    if ($update_size) {
-//                        $update_size->update($data);
-////                        UpdateSizeAndSaveJob::dispatch($update_size,$data);
-//                    } else {
-//                        (new Product())->create($data);
-////                        GetParseSizeAndSaveJob::dispatch($data);
-//                    }
-//
-//                } catch (Throwable $e) {
-//
-//                    report($e);
-//                    continue;
-//                }
-//            }
-//        } catch (Throwable $e) {
-//            report($e);
-//            return false;
-//        }
-//        return true;
+        try {
+
+            foreach ($array as $item) {
+
+                $item = $this->validatorContract->validate($item);
+
+                $item['name'] = html_entity_decode($item['name']);
+
+                try {
+                    $update_product = $this->productRepositories->getProductByID($item['id']);
+//                    dd($update_product);
+                    if ($update_product) {
+                        $this->updateProduct($update_product, $item);
+                    } else {
+                        $this->createProduct($item);
+                    }
+
+                } catch (Throwable $e) {
+
+                    report($e);
+                    continue;
+                }
+            }
+        } catch (Throwable $e) {
+            report($e);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param array $item
+     */
+
+    protected function createProduct(array $item)
+    {
+        try {
+            $product = (new Product())->create($item);
+            $product->topping()->attach(Arr::pluck($item['toppings'], 'id'));
+
+            foreach ($item['sizes'] as $size) {
+                foreach ($size['flavors'] as $flavor) {
+                    $product->size()->attach($size['id'], ['flavor_id' => $flavor['id'], 'price' => $flavor['product']['price']]);
+                }
+            }
+        } catch (Throwable $e) {
+
+            report($e);
+        }
+    }
+
+    protected function updateProduct(Product $product, array $data)
+    {
+        $product->update($data);
+
+        try {
+            $product->topping()->sync(Arr::pluck($data['toppings'], 'id'));
+
+            foreach ($data['sizes'] as $size) {
+                foreach ($size['flavors'] as $flavor) {
+                    $product->size()->updateExistingPivot($size['id'], ['flavor_id' => $flavor['id'], 'price' => $flavor['product']['price']]);
+                }
+            }
+
+        } catch (Throwable $e) {
+            report($e);
+            return false;
+        }
     }
 }

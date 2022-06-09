@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Services\FlavorService;
 
 
-use App\Jobs\GetParseSizeAndSaveJob;
-use App\Jobs\UpdateSizeAndSaveJob;
 use App\Models\Flavor;
-use App\Repositories\ToppingRepositories;
+use App\Repositories\FlavorRepositories;
 use App\Services\FlavorService\Contracts\FlavorServiceContract;
 use App\Services\FlavorService\Contracts\FlavorValidatorContract;
 use Throwable;
@@ -20,11 +18,11 @@ class FlavorService implements FlavorServiceContract
 
     /**
      * @param FlavorValidatorContract $flavorValidatorContract
-     * @param ToppingRepositories $flavorRepositories
+     * @param FlavorRepositories $flavorRepositories
      */
     public function __construct(
         protected FlavorValidatorContract $flavorValidatorContract,
-        protected ToppingRepositories $flavorRepositories,
+        protected FlavorRepositories $flavorRepositories,
     )
     {
     }

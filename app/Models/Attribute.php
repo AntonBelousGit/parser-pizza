@@ -12,7 +12,8 @@ class Attribute extends Model
 {
     use HasFactory,Historical;
 
-    protected $fillable = ['product_id','size_id','flavor_id','price'];
+//    protected $fillable = ['product_id','size_id','flavor_id','price'];
+    protected $guarded = [];
 
     protected $table = 'product_size_flavor';
 
