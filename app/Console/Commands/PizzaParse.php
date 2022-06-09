@@ -11,6 +11,7 @@ use App\Services\ProductService\Contracts\ProductServiceContract;
 use App\Services\SizeService\Contracts\SizeServiceContract;
 use App\Services\ToppingService\Contracts\ToppingServiceContract;
 use Illuminate\Console\Command;
+use Throwable;
 
 class PizzaParse extends Command
 {
@@ -31,7 +32,7 @@ class PizzaParse extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return string
      */
     public function handle(
         ParseServiceContract $contract,
@@ -42,12 +43,20 @@ class PizzaParse extends Command
         ProductServiceContract $productServiceContract,
     )
     {
-        $data = $contract->parseProduct();
-        $attribute = $attributeContract->parseAttribute($data);
-        $sizeServiceContract->store($attribute[config('services.parser.product_attribute')]);
-        $flavorServiceContract->store($attribute[config('services.parser.product_relations_attribute')]);
-        $toppingServiceContract->store($attribute[config('services.parser.product_topping')]);
-        $productServiceContract->store($data);
+        try {
+            $data = $contract->parseProduct();
+            $attribute = $attributeContract->parseAttribute($data);
+            $sizeServiceContract->store($attribute[config('services.parser.product_attribute')]);
+            $flavorServiceContract->store($attribute[config('services.parser.product_relations_attribute')]);
+            $toppingServiceContract->store($attribute[config('services.parser.product_topping')]);
+            $productServiceContract->store($data);
+
+            $this->info('The command was successful!');
+        } catch (Throwable $e) {
+            report($e);
+            $this->error('Something went wrong! Check log file');
+        }
+
 
     }
 }

@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('product_size_flavor', function (Blueprint $table) {
-            $table->string('product_id', 50)->references('id')->on('products');
-            $table->string('size_id', 50)->references('id')->on('sizes');
-            $table->string('flavor_id', 50)->references('id')->on('flavors');
+            $table->id();
+            $table->string('product_id', 50)->references('id')->on('products')->onUpdate('cascade');
+            $table->string('size_id', 50)->references('id')->on('sizes')->onUpdate('cascade');;
+            $table->string('flavor_id', 50)->references('id')->on('flavors')->onUpdate('cascade');;
             $table->float('price')->nullable();
-            $table->primary(['product_id', 'size_id', 'flavor_id']);
+            $table->timestamps();
         });
     }
 
